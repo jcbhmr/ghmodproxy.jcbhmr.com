@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:execa@^9.6.1": "9.6.1"
+    "npm:execa@9.6.1": "9.6.1"
   },
   "npm": {
     "@sec-ant/readable-stream@0.4.1": {
@@ -113,10 +113,5 @@
     "yoctocolors@2.1.2": {
       "integrity": "sha512-CzhO+pFNo8ajLM2d2IW/R93ipy99LWjtwblvC1RsoSUMZgyLbYFr221TnSNT7GjGdYui6P459mw9JH/g/zW2ug=="
     }
-  },
-  "workspace": {
-    "dependencies": [
-      "npm:execa@^9.6.1"
-    ]
   }
 }
