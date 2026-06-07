@@ -1,5 +1,5 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "image": "mcr.microsoft.com/devcontainers/go",
   "updateContentCommand": "curl -fsSL https://deno.land/install.sh | sh -s -- --yes",
   "customizations": {
     "vscode": {
