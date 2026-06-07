@@ -5,10 +5,7 @@ import * as child_process from "node:child_process"
 import * as os from "node:os"
 
 const command = url.fileURLToPath(import.meta.resolve("./app"));
-const status = child_process.spawnSync(command, process.argv, {
-  argv0: process.argv0,
-  stdio: "inherit",
-})
+const status = child_process.spawnSync(command, process.argv, { stdio: "inherit" })
 if (status.error) {
   throw status.error
 } else if (status.signal != null) {
