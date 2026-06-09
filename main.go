@@ -13,7 +13,9 @@ import (
 
 func listenAndServe(addr string, handler http.Handler) error {
 	if v, _ := strconv.ParseBool(os.Getenv("DENO_DEPLOY")); v {
-		// DENO_SERVE_ADDRESS is always "duplicate,vsock:-1:8080" on Deno Deploy.
+		if got, want := os.Getenv("DENO_SERVE_ADDRESS"), "duplicate,vsock:-1:8080"; got != want {
+			panic(fmt.Errorf("DENO_SERVE_ADDRESS got %v, want %v", got, want))
+		}
 		l, err := vsock.Listen(8080, nil)
 		if err != nil {
 			return err
