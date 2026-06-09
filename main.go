@@ -37,5 +37,6 @@ func init() {
 }
 
 func main() {
+	fmt.Printf("Hello %s!\n", "Alan Turing")
 	log.Fatal(listenAndServe(":8080", nil))
 }

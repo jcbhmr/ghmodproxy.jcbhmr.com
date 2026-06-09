@@ -10,7 +10,7 @@ await execa({
         GOLANG_VERSION: undefined,
         GOROOT: undefined,
         GOTOOLCHAIN: undefined,
-        GOPATH: undefined,
+        GOPATH: path.join(os.homedir(), "gopath"),
         CGO_ENABLED: "0",
     },
 })`${path.join(os.homedir(), "go")}/bin/go build .`
