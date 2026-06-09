@@ -1,5 +1,7 @@
 #!/usr/bin/env -S deno --allow-all
 import { execa } from "npm:execa@9.6.1"
+import * as path from "node:path"
+import * as os from "node:os"
 
 await execa({
     verbose: "short",
@@ -10,4 +12,4 @@ await execa({
         GOTOOLCHAIN: undefined,
         GOPATH: undefined,
     },
-})`./go/bin/go build .`
+})`${path.join(os.homedir(), "go")}/bin/go build .`
