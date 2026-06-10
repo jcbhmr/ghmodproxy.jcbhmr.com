@@ -1,7 +1,10 @@
 {
   "tasks": {
     "install": "./install.ts",
-    "build": "./build.ts"
+    "build": "./build.ts",
+    "dev": "./main.ts"
   },
-  "imports": {}
+  "imports": {
+    "type-fest": "npm:type-fest@^5.7.0"
+  }
 }

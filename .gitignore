@@ -36,6 +36,3 @@ go.work.sum
 # Artifacts
 /app
 /app.exe
-
-# Local Go installation
-/go

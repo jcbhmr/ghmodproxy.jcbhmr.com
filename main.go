@@ -3,32 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"strconv"
-
-	"github.com/mdlayher/vsock"
 )
-
-func listenAndServe(addr string, handler http.Handler) error {
-	if v, _ := strconv.ParseBool(os.Getenv("DENO_DEPLOY")); v {
-		if got, want := os.Getenv("DENO_SERVE_ADDRESS"), "duplicate,vsock:-1:8080"; got != want {
-			panic(fmt.Errorf("DENO_SERVE_ADDRESS got %v, want %v", got, want))
-		}
-		l, err := vsock.Listen(8080, nil)
-		if err != nil {
-			return err
-		}
-		return http.Serve(l, handler)
-	}
-	l, err := net.Listen("tcp", addr)
-	if err != nil {
-		return err
-	}
-	log.Printf("Listening on http://%s/", l.Addr())
-	return http.Serve(l, handler)
-}
 
 func init() {
 	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +15,19 @@ func init() {
 }
 
 func main() {
-	fmt.Printf("Hello %s!\n", "Alan Turing")
-	log.Fatal(listenAndServe(":8080", nil))
+	port := uint16(7045)
+	if v, ok := os.LookupEnv("PORT"); ok {
+		port64, err := strconv.ParseUint(v, 10, 16)
+		if err != nil {
+			log.Fatal(err)
+		}
+		port = uint16(port64)
+	}
+
+	// l, err := net.Listen("tcp", ":"+strconv.FormatUint(uint64(port), 10))
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// log.Fatal(fcgi.Serve(l, nil))
+	log.Fatal(http.ListenAndServe(":"+strconv.FormatUint(uint64(port), 10), nil))
 }
