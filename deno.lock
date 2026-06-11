@@ -7,6 +7,7 @@
     "jsr:@std/streams@^1.1.1": "1.1.1",
     "npm:arkenv@~0.12.1": "0.12.1_arktype@2.2.0",
     "npm:arktype@^2.2.0": "2.2.0",
+    "npm:cgi@~0.3.1": "0.3.1",
     "npm:execa@9.6.1": "9.6.1",
     "npm:type-fest@^5.7.0": "5.7.0"
   },
@@ -66,12 +67,33 @@
         "arkregex"
       ]
     },
+    "bufferjs@3.0.1": {
+      "integrity": "sha512-qrCIGPcd9ODawCNyqR2o55zgaC/r7XHZ7oUh2s99uk+NVBS3SjIHigxS1S2KXpt8wsoQxAN55iPi8GIH8TGMRg=="
+    },
+    "bufferlist@0.1.0": {
+      "integrity": "sha512-cg77q4YhmxV+/e7WhrShHGyOgey0GowZwg0cfXKCz5v3wfx73pUyrsnLnGY7DQZnjhtvmAaSMrf045zuJpDGDg=="
+    },
+    "cgi@0.3.1": {
+      "integrity": "sha512-V8UI9xBCOBKkuw1UEnD5NxHNuYDGCN3q4FncqNXPDpsSEQWwBShqUrvxIf+nL31hMHc5RCbkAuUy4r7j0wx00A==",
+      "dependencies": [
+        "debug",
+        "extend",
+        "header-stack",
+        "stream-stack"
+      ]
+    },
     "cross-spawn@7.0.6": {
       "integrity": "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==",
       "dependencies": [
         "path-key@3.1.1",
         "shebang-command",
         "which"
+      ]
+    },
+    "debug@2.6.9": {
+      "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
+      "dependencies": [
+        "ms"
       ]
     },
     "execa@9.6.1": {
@@ -91,6 +113,9 @@
         "yoctocolors"
       ]
     },
+    "extend@2.0.2": {
+      "integrity": "sha512-AgFD4VU+lVLP6vjnlNfF7OeInLTyeyckCNPEsuxz1vi786UuK/nk6ynPuhn/h+Ju9++TQyr5EpLRI14fc1QtTQ=="
+    },
     "figures@6.1.0": {
       "integrity": "sha512-d+l3qxjSesT4V7v2fh+QnmFnUWv9lSpjarhShNTgBOfA0ttejbQUAlHLitbjkoRiDulW0OPoQPYIGhIC8ohejg==",
       "dependencies": [
@@ -102,6 +127,14 @@
       "dependencies": [
         "@sec-ant/readable-stream",
         "is-stream"
+      ]
+    },
+    "header-stack@0.0.2": {
+      "integrity": "sha512-/Qs4VDHOv6/d7V59PxaNJvXUnk9er47KViQLa1l03dxvSzStHuAIN6cHMY1hHH/o+ceROmzaDLje918QKty0Jw==",
+      "dependencies": [
+        "bufferjs",
+        "bufferlist",
+        "stream-stack"
       ]
     },
     "human-signals@8.0.1": {
@@ -118,6 +151,9 @@
     },
     "isexe@2.0.0": {
       "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="
+    },
+    "ms@2.0.0": {
+      "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="
     },
     "npm-run-path@6.0.0": {
       "integrity": "sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==",
@@ -152,6 +188,9 @@
     },
     "signal-exit@4.1.0": {
       "integrity": "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="
+    },
+    "stream-stack@1.1.4": {
+      "integrity": "sha512-bmRYXVkxuyuiK3kvf54hgfLpv2TGlNzXE9S/DCPV82HqhcDonPFuRBWpeQUCpnRrprVCqXwrxVTq9WDwrrsLTg=="
     },
     "strip-final-newline@4.0.0": {
       "integrity": "sha512-aulFJcD6YK8V1G7iRB5tigAP4TsHBZZrOV8pjV++zdUwmeV8uzbY7yn6h9MswN62adStNZFuCIx4haBnRuMDaw=="
@@ -215,6 +254,7 @@
       "jsr:@std/streams@^1.1.1",
       "npm:arkenv@~0.12.1",
       "npm:arktype@^2.2.0",
+      "npm:cgi@~0.3.1",
       "npm:type-fest@^5.7.0"
     ]
   }

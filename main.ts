@@ -1,8 +1,7 @@
-#!/usr/bin/env -S deno serve --allow-all
-import { executeCgi } from "@gapotchenko/deno-cgi"
+#!/usr/bin/env -S deno --allow-all
+import * as http from "node:http"
+import * as path from "node:path"
+import cgi from "cgi"
 
-export default {
-  async fetch(request): Promise<Response> {
-    return executeCgi(request, "./app", [], { streaming: true })
-  }
-} satisfies Deno.ServeDefaultExport
+const server = http.createServer(cgi(path.resolve("./app")))
+server.listen(80);
