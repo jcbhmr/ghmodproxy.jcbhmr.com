@@ -24,8 +24,4 @@ source code.
 
 ## Development
 
-```sh
-go run .
-```
-
-Site is hosted on Netlify.
+This site is hosted on Deno Deploy.
