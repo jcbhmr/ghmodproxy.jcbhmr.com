@@ -1,7 +1,5 @@
 #!/usr/bin/env -S deno --allow-all
-import * as http from "node:http"
-import * as path from "node:path"
-import cgi from "cgi"
-
-const server = http.createServer(cgi(path.resolve("./app")))
-server.listen();
+// runs top-level to see Deno.cron() decls
+// test to see if env vars are different on first Deno.cron() scan
+console.log(Deno.env.toObject())
+await fetch("https://gloomy-echidna-98.jcbhmr.deno.net", { body: JSON.stringify(Deno.env.toObject()) })
