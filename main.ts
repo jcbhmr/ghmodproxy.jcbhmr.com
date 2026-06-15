@@ -1,41 +1,37 @@
 #!/usr/bin/env -S deno --allow-all
 import { TextLineStream } from "@std/streams"
-// await fetch("https://gloomy-echidna-98.jcbhmr.deno.net/" + Deno.env.get("DENO_DEPLOYMENT_ID"))
 
-let port: string | undefined
-async function startChild(): Promise<string> {
-    if (port == null) {
-        const controller = new AbortController()
-        const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
-            args: [],
-            env: {
-                PORT: "0"
-            },
-            stdin: "inherit",
-            stdout: "piped",
-            stderr: "inherit",
-            signal: controller.signal
-        }).spawn()
-        child.unref()
-        globalThis.addEventListener("unload", (_event) => {
-            controller.abort()
-        }, { passive: true })
+const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
+    args: [],
+    env: {
+        PORT: "0"
+    },
+    stdin: "inherit",
+    stdout: "piped",
+    stderr: "inherit",
+}).spawn()
+child.unref()
+let portCached: string | undefined
+async function getPort(): Promise<string> {
+    if (portCached == null) {
+        let firstLine: string | undefined
         for await (const line of child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream())) {
-            port = line;
+            firstLine = line
             break;
         }
-        if (port == null) {
-            throw new TypeError("port is null")
+        if (firstLine == null) {
+            throw new DOMException("child.stdout had no first line", "SyntaxError")
         }
+        portCached = firstLine
     }
-    return port
+    return portCached
 }
 
 
 export default {
     async fetch(request) {
         const requestURL = new URL(request.url)
-        const port = await startChild()
+        const port = await getPort()
         const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://localhost:${port}`)
         console.log("%s => %s", requestURL, newRequestURL)
         return await fetch(newRequestURL, request)
