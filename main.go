@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
+	"net"
 	"net/http"
-	"net/http/cgi"
+
+	"github.com/mdlayher/vsock"
 )
 
 func init() {
@@ -23,14 +26,15 @@ func main() {
 	// 	port = uint16(port64)
 	// }
 
-	// l, err := net.Listen("tcp", ":"+strconv.FormatUint(uint64(port), 10))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// log.Fatal(fcgi.Serve(l, nil))
-	err := cgi.Serve(nil)
+	cid, err := vsock.ContextID()
+	fmt.Printf("cid=%v, err=%v\n", cid, err)
+	var l net.Listener
+	l, err = vsock.ListenContextID(math.MaxUint32, 8080, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// log.Fatal(http.ListenAndServe(":"+strconv.FormatUint(uint64(port), 10), nil))
+	err = http.Serve(l, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
