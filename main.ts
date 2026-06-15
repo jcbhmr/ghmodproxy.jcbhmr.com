@@ -15,7 +15,7 @@ const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
 }).spawn()
 child.unref()
 
-const signal = AbortSignal.timeout(200)
+const signal = AbortSignal.timeout(500)
 while (true) {
     signal.throwIfAborted()
     try {
