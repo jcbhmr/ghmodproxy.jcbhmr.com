@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"math"
 	"net"
 	"net/http"
 
-	"github.com/mdlayher/vsock"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -41,18 +39,18 @@ func main() {
 	// }
 
 	g, _ := errgroup.WithContext(context.TODO())
-	g.Go(func() error {
-		var l net.Listener
-		l, err := vsock.ListenContextID(math.MaxUint32, 8080, nil)
-		if err != nil {
-			return err
-		}
+	// g.Go(func() error {
+	// 	var l net.Listener
+	// 	l, err := vsock.ListenContextID(math.MaxUint32, 8080, nil)
+	// 	if err != nil {
+	// 		return err
+	// 	}
 
-		// addr := l.Addr().(*vsock.Addr)
-		// fmt.Printf("Listening on http://%s\n", addr)
+	// 	// addr := l.Addr().(*vsock.Addr)
+	// 	// fmt.Printf("Listening on http://%s\n", addr)
 
-		return http.Serve(l, nil)
-	})
+	// 	return http.Serve(l, nil)
+	// })
 	g.Go(func() error {
 		l, err := net.Listen("tcp", ":0")
 		if err != nil {

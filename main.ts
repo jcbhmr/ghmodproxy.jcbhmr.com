@@ -18,8 +18,12 @@ for await (const line of child.stdout.pipeThrough(new DelimiterStream(Uint8Array
     break;
 }
 const firstLineText = firstLineBytes ? new TextDecoder().decode(firstLineBytes) : ""
-const listeningOn = firstLineText.match(/(http:\/\/\S+)/)?.[0]
-console.log("Listening on %c%s", "color: yellow", listeningOn ?? "<unknown>")
+const listeningOnMatch = firstLineText.match(/https?:\/\/\S+/)
+const listeningOnURL = listeningOnMatch ? new URL(listeningOnMatch[0]) : null
+if (listeningOnURL == null) {
+    throw new Error()
+}
+console.log("Listening on %c%s", "color: yellow", listeningOnURL)
 
 // let portCached: string | undefined
 // async function getPort(): Promise<string> {
@@ -38,13 +42,11 @@ console.log("Listening on %c%s", "color: yellow", listeningOn ?? "<unknown>")
 // }
 
 
-// export default {
-//     async fetch(request) {
-//         const requestURL = new URL(request.url)
-//         const port = await getPort()
-//         const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://localhost:${port}`)
-//         console.log("%s => %s", requestURL, newRequestURL)
-//         return await fetch(newRequestURL, request)
-//     }
-// } satisfies Deno.ServeDefaultExport
+export default {
+    async fetch(request) {
+        const requestURL = new URL(request.url)
+        const newRequestURL = new URL(requestURL.pathname + requestURL.search, listeningOnURL)
+        return await fetch(newRequestURL, request)
+    }
+} satisfies Deno.ServeDefaultExport
 
