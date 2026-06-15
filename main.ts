@@ -27,7 +27,7 @@ void b.pipeTo(new WritableStream({
 }))
 const firstLineText = firstLineBytes ? new TextDecoder().decode(firstLineBytes) : ""
 const listeningOn = firstLineText.match(/(http:\/\/\S+)/)?.[0]
-console.log("Listening on %c%s", listeningOn ?? "<unknown>")
+console.log("Listening on %c%s", "color: yellow", listeningOn ?? "<unknown>")
 
 // let portCached: string | undefined
 // async function getPort(): Promise<string> {
