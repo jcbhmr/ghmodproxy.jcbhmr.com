@@ -9,34 +9,19 @@ const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
         PORT: port.toString()
     },
     stdin: "inherit",
-    stdout: "piped",
-    stderr: "piped",
+    stdout: "inherit",
+    stderr: "inherit",
 }).spawn()
-const firstByteSeen = Promise.withResolvers<void>()
-void child.stdout.pipeThrough(new TransformStream({
-    transform(chunk, controller) {
-        firstByteSeen.resolve()
-        controller.enqueue(chunk)
-    },
-    cancel(reason) {
-        firstByteSeen.reject(reason)
-    }
-})).pipeTo(Deno.stdout.writable, { preventAbort: true, preventCancel: true, preventClose: true })
-void child.stderr.pipeThrough(new TransformStream({
-    transform(chunk, controller) {
-        firstByteSeen.resolve()
-        controller.enqueue(chunk)
-    },
-    cancel(reason) {
-        firstByteSeen.reject(reason)
-    }
-})).pipeTo(Deno.stderr.writable, { preventAbort: true, preventCancel: true, preventClose: true })
 child.unref()
+
+// const signal = AbortSignal.timeout(500)
+// while (await fetch(`http://[::1]:${port}`, { method: "HEAD", signal }).then(() => false, () => true)) {
+//     signal.throwIfAborted()
+// }
 
 export default {
     async fetch(request) {
         const requestURL = new URL(request.url)
-        await firstByteSeen.promise;
         const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://[::1]:${port}`)
         return await fetch(newRequestURL, request)
     }
