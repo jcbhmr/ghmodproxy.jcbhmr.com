@@ -3,29 +3,29 @@ import { TextLineStream } from "@std/streams"
 
 const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
     args: [],
-    env: {
-        PORT: "0"
-    },
+    // env: {
+    //     PORT: "0"
+    // },
     stdin: "inherit",
-    stdout: "piped",
+    stdout: "inherit",
     stderr: "inherit",
 }).spawn()
 child.unref()
-let portCached: string | undefined
-async function getPort(): Promise<string> {
-    if (portCached == null) {
-        let firstLine: string | undefined
-        for await (const line of child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream())) {
-            firstLine = line
-            break;
-        }
-        if (firstLine == null) {
-            throw new DOMException("child.stdout had no first line", "SyntaxError")
-        }
-        portCached = firstLine
-    }
-    return portCached
-}
+// let portCached: string | undefined
+// async function getPort(): Promise<string> {
+//     if (portCached == null) {
+//         let firstLine: string | undefined
+//         for await (const line of child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream())) {
+//             firstLine = line
+//             break;
+//         }
+//         if (firstLine == null) {
+//             throw new DOMException("child.stdout had no first line", "SyntaxError")
+//         }
+//         portCached = firstLine
+//     }
+//     return portCached
+// }
 
 
 // export default {
