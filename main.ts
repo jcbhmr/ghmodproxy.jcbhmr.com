@@ -2,6 +2,7 @@
 import { getAvailablePort } from "@std/net"
 
 const port = getAvailablePort({ preferredPort: 8000 })
+
 const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
     args: [],
     env: {
@@ -14,10 +15,19 @@ const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
 }).spawn()
 child.unref()
 
-// const signal = AbortSignal.timeout(500)
-// while (await fetch(`http://[::1]:${port}`, { method: "HEAD", signal }).then(() => false, () => true)) {
-//     signal.throwIfAborted()
-// }
+const signal = AbortSignal.timeout(200)
+while (true) {
+    signal.throwIfAborted()
+    try {
+        await fetch(`http://[::1]:${port}`, { method: "HEAD", signal }).then(() => false, () => true)
+    } catch (error) {
+        if (error instanceof TypeError && error.message.includes("os error 111")) {
+            continue;
+        } else {
+            throw error
+        }
+    }
+}
 
 export default {
     async fetch(request) {
