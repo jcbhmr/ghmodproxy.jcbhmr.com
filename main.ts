@@ -1,6 +1,7 @@
 #!/usr/bin/env -S deno --allow-all
 import { DelimiterStream, TextLineStream } from "@std/streams"
 
+console.log("%cDENO_SERVE_ADDRESS=%o", "color: blue", Deno.env.get("DENO_SERVE_ADDRESS"))
 const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
     args: [],
     // env: {
