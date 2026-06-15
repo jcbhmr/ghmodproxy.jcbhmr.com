@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/mdlayher/vsock"
+	"golang.org/x/sync/errgroup"
 )
 
 func init() {
@@ -38,16 +40,32 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	var l net.Listener
-	l, err := vsock.ListenContextID(math.MaxUint32, 8080, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	g, _ := errgroup.WithContext(context.TODO())
+	g.Go(func() error {
+		var l net.Listener
+		l, err := vsock.ListenContextID(math.MaxUint32, 8080, nil)
+		if err != nil {
+			return err
+		}
 
-	addr := l.Addr().(*vsock.Addr)
-	fmt.Printf("Listening on http://%s\n", addr)
+		addr := l.Addr().(*vsock.Addr)
+		fmt.Printf("Listening on http://%s\n", addr)
 
-	err = http.Serve(l, nil)
+		return http.Serve(l, nil)
+	})
+	// g.Go(func() error {
+	// 	l, err := net.Listen("tcp", ":8000")
+	// 	if err != nil {
+	// 		if errors.Is(err, )
+	// 		return err
+	// 	}
+
+	// 	addr := l.Addr().(*net.TCPAddr)
+	// 	fmt.Printf("Listening on http://%s\n", addr)
+
+	// 	return http.Serve(l, nil)
+	// })
+	err := g.Wait()
 	if err != nil {
 		log.Fatal(err)
 	}
