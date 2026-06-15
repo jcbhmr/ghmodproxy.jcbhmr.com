@@ -6,6 +6,7 @@
   },
   "imports": {
     "@gapotchenko/deno-cgi": "jsr:@gapotchenko/deno-cgi@^1.0.2",
+    "@std/net": "jsr:@std/net@^1.0.6",
     "@std/streams": "jsr:@std/streams@^1.1.1",
     "arkenv": "npm:arkenv@^0.12.1",
     "arktype": "npm:arktype@^2.2.0",

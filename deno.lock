@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@gapotchenko/deno-cgi@^1.0.2": "1.0.2",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
+    "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/streams@^1.0.12": "1.1.1",
     "jsr:@std/streams@^1.1.1": "1.1.1",
     "npm:arkenv@~0.12.1": "0.12.1_arktype@2.2.0",
@@ -20,6 +21,9 @@
     },
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
+    },
+    "@std/net@1.0.6": {
+      "integrity": "110735f93e95bb9feb95790a8b1d1bf69ec0dc74f3f97a00a76ea5efea25500c"
     },
     "@std/streams@1.1.1": {
       "integrity": "92556d350e537e9dce527a6d08f6f15be3ff65e656079dea69d15252187c7613",
@@ -251,6 +255,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@gapotchenko/deno-cgi@^1.0.2",
+      "jsr:@std/net@^1.0.6",
       "jsr:@std/streams@^1.1.1",
       "npm:arkenv@~0.12.1",
       "npm:arktype@^2.2.0",

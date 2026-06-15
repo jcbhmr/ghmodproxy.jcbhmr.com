@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -52,7 +53,7 @@ func main() {
 	// 	return http.Serve(l, nil)
 	// })
 	g.Go(func() error {
-		l, err := net.Listen("tcp", ":0")
+		l, err := net.Listen("tcp", os.Getenv("HOST")+":"+os.Getenv("PORT"))
 		if err != nil {
 			return err
 		}

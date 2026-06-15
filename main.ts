@@ -1,51 +1,43 @@
-#!/usr/bin/env -S deno --allow-all
-import { DelimiterStream, TextLineStream } from "@std/streams"
+#!/usr/bin/env -S deno serve --allow-all
+import { getAvailablePort } from "@std/net"
 
-console.log("%cDENO_SERVE_ADDRESS=%o", "color: green", Deno.env.get("DENO_SERVE_ADDRESS"))
+const port = getAvailablePort({ preferredPort: 8000 })
 const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
     args: [],
-    // env: {
-    //     PORT: "0"
-    // },
+    env: {
+        HOST: "[::]",
+        PORT: port.toString()
+    },
     stdin: "inherit",
     stdout: "piped",
-    stderr: "inherit",
+    stderr: "piped",
 }).spawn()
+const firstByteSeen = Promise.withResolvers<void>()
+void child.stdout.pipeThrough(new TransformStream({
+    transform(chunk, controller) {
+        firstByteSeen.resolve()
+        controller.enqueue(chunk)
+    },
+    cancel(reason) {
+        firstByteSeen.reject(reason)
+    }
+})).pipeTo(Deno.stdout.writable, { preventAbort: true, preventCancel: true, preventClose: true })
+void child.stderr.pipeThrough(new TransformStream({
+    transform(chunk, controller) {
+        firstByteSeen.resolve()
+        controller.enqueue(chunk)
+    },
+    cancel(reason) {
+        firstByteSeen.reject(reason)
+    }
+})).pipeTo(Deno.stderr.writable, { preventAbort: true, preventCancel: true, preventClose: true })
 child.unref()
-let firstLineBytes: Uint8Array | undefined
-for await (const line of child.stdout.pipeThrough(new DelimiterStream(Uint8Array.from("\n", c => c.codePointAt(0)!), { disposition: "suffix" }))) {
-    firstLineBytes = line
-    break;
-}
-const firstLineText = firstLineBytes ? new TextDecoder().decode(firstLineBytes) : ""
-const listeningOnMatch = firstLineText.match(/https?:\/\/\S+/)
-const listeningOnURL = listeningOnMatch ? new URL(listeningOnMatch[0]) : null
-if (listeningOnURL == null) {
-    throw new Error()
-}
-console.log("Listening on %c%s", "color: yellow", listeningOnURL)
-
-// let portCached: string | undefined
-// async function getPort(): Promise<string> {
-//     if (portCached == null) {
-//         let firstLine: string | undefined
-//         for await (const line of child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream())) {
-//             firstLine = line
-//             break;
-//         }
-//         if (firstLine == null) {
-//             throw new DOMException("child.stdout had no first line", "SyntaxError")
-//         }
-//         portCached = firstLine
-//     }
-//     return portCached
-// }
-
 
 export default {
     async fetch(request) {
         const requestURL = new URL(request.url)
-        const newRequestURL = new URL(requestURL.pathname + requestURL.search, listeningOnURL)
+        await firstByteSeen.promise;
+        const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://[::1]:${port}`)
         return await fetch(newRequestURL, request)
     }
 } satisfies Deno.ServeDefaultExport
