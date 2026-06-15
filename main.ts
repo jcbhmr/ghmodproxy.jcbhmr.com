@@ -28,13 +28,13 @@ async function getPort(): Promise<string> {
 }
 
 
-export default {
-    async fetch(request) {
-        const requestURL = new URL(request.url)
-        const port = await getPort()
-        const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://localhost:${port}`)
-        console.log("%s => %s", requestURL, newRequestURL)
-        return await fetch(newRequestURL, request)
-    }
-} satisfies Deno.ServeDefaultExport
+// export default {
+//     async fetch(request) {
+//         const requestURL = new URL(request.url)
+//         const port = await getPort()
+//         const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://localhost:${port}`)
+//         console.log("%s => %s", requestURL, newRequestURL)
+//         return await fetch(newRequestURL, request)
+//     }
+// } satisfies Deno.ServeDefaultExport
 
