@@ -15,22 +15,29 @@ const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
 }).spawn()
 child.unref()
 
-const signal = AbortSignal.timeout(500)
-while (true) {
-    signal.throwIfAborted()
-    try {
-        await fetch(`http://[::1]:${port}`, { method: "HEAD", signal }).then(() => false, () => true)
-    } catch (error) {
-        if (error instanceof TypeError && error.message.includes("os error 111")) {
-            continue;
-        } else {
-            throw error
+let ready: Promise<void> | undefined
+function getReady(): Promise<void> {
+    ready ??= (async () => {
+        const signal = AbortSignal.timeout(500)
+        while (true) {
+            signal.throwIfAborted()
+            try {
+                await fetch(`http://[::1]:${port}`, { method: "HEAD", signal }).then(() => false, () => true)
+            } catch (error) {
+                if (error instanceof TypeError && error.message.includes("os error 111")) {
+                    continue;
+                } else {
+                    throw error
+                }
+            }
         }
-    }
+    })()
+    return ready
 }
 
 export default {
     async fetch(request) {
+        await getReady()
         const requestURL = new URL(request.url)
         const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://[::1]:${port}`)
         return await fetch(newRequestURL, request)
