@@ -1,6 +1,22 @@
 #!/usr/bin/env -S deno serve --allow-all
 import { getAvailablePort } from "@std/net"
 
+function denoServeAddresses() {
+    const localAddrs: Deno.Addr[] = []
+    const server = Deno.serve({
+        onListen(localAddr) {
+            localAddrs.push(localAddr)
+        },
+    }, () => new Response(null, { status: 500 }))
+    void server.shutdown()
+    return localAddrs
+}
+
+console.time()
+const addrs = denoServeAddresses()
+console.timeEnd()
+console.log(addrs)
+
 let port: number | undefined
 
 export default {
