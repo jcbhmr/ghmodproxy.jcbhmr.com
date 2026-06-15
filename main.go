@@ -48,23 +48,22 @@ func main() {
 			return err
 		}
 
-		addr := l.Addr().(*vsock.Addr)
+		// addr := l.Addr().(*vsock.Addr)
+		// fmt.Printf("Listening on http://%s\n", addr)
+
+		return http.Serve(l, nil)
+	})
+	g.Go(func() error {
+		l, err := net.Listen("tcp", ":0")
+		if err != nil {
+			return err
+		}
+
+		addr := l.Addr().(*net.TCPAddr)
 		fmt.Printf("Listening on http://%s\n", addr)
 
 		return http.Serve(l, nil)
 	})
-	// g.Go(func() error {
-	// 	l, err := net.Listen("tcp", ":8000")
-	// 	if err != nil {
-	// 		if errors.Is(err, )
-	// 		return err
-	// 	}
-
-	// 	addr := l.Addr().(*net.TCPAddr)
-	// 	fmt.Printf("Listening on http://%s\n", addr)
-
-	// 	return http.Serve(l, nil)
-	// })
 	err := g.Wait()
 	if err != nil {
 		log.Fatal(err)
