@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"golang.org/x/sync/errgroup"
+	"golang.org/x/sys/unix"
 )
 
 func init() {
@@ -31,6 +32,15 @@ func main() {
 
 		addr := l.Addr().(*net.TCPAddr)
 		fmt.Printf("Listening on http://%s\n", addr)
+
+		p, err := os.FindProcess(os.Getppid())
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = p.Signal(unix.SIGUSR2)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		return http.Serve(l, nil)
 	})
