@@ -29,7 +29,7 @@ func main() {
 		}
 
 		addr := l.Addr().(*vsock.Addr)
-		fmt.Printf("Listening on http://%s\n", addr)
+		fmt.Printf("Listening for HTTP on %s\n", addr)
 
 		return http.Serve(l, nil)
 	})
@@ -40,7 +40,7 @@ func main() {
 		}
 
 		addr := l.Addr().(*net.TCPAddr)
-		fmt.Printf("Listening on http://%s\n", addr)
+		fmt.Printf("Listening for HTTP on %s\n", addr)
 
 		return http.Serve(l, nil)
 	})
