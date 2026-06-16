@@ -1,57 +1,20 @@
-#!/usr/bin/env -S deno serve --allow-all
-import { getAvailablePort } from "@std/net"
+#!/usr/bin/env -S deno --allow-all
+import { TextLineStream } from "@std/streams";
+import ConsoleStream from "./console_stream.ts";
 
-function denoServeAddresses() {
-    const localAddrs: Deno.Addr[] = []
-    const server = Deno.serve({
-        onListen(localAddr) {
-            localAddrs.push(localAddr)
-        },
-    }, () => new Response(null, { status: 500 }))
-    void server.shutdown()
-    return localAddrs
-}
-
-console.time()
-const addrs = denoServeAddresses()
-console.timeEnd()
-console.log(addrs)
-
-let port: number | undefined
-
-export default {
-    async fetch(request, info) {
-        // if (port == null) {
-        //     port = getAvailablePort({ preferredPort: 8000 })
-        //     const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
-        //         args: [],
-        //         env: {
-        //             HOST: "[::]",
-        //             PORT: port.toString()
-        //         },
-        //         stdin: "inherit",
-        //         stdout: "inherit",
-        //         stderr: "inherit",
-        //     }).spawn()
-        //     child.unref()
-        //     await new Promise<void>((resolve, reject) => {
-        //         const l = () => {
-        //             resolve()
-        //             Deno.removeSignalListener("SIGUSR2", l)
-        //         }
-        //         child.status.then(reject, reject).finally(() => {
-        //             Deno.removeSignalListener("SIGUSR2", l)
-        //         })
-        //         Deno.addSignalListener("SIGUSR2", l)
-        //     })
-        // }
-        // const requestURL = new URL(request.url)
-        // const newRequestURL = new URL(requestURL.pathname + requestURL.search, `http://[::1]:${port}`)
-        // return await fetch(newRequestURL, request)
-        return new Response("HELLO")
-    },
-    onListen(localAddr) {
-        console.log({ localAddr })
-    }
-} satisfies Deno.ServeDefaultExport
+const child = new Deno.Command(new URL(import.meta.resolve("./app")), {
+    args: [],
+    env: {},
+    stdin: "inherit",
+    stdout: "piped",
+    stderr: "piped",
+}).spawn()
+void child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream()).pipeTo(new ConsoleStream())
+void child.stderr.pipeThrough(new TextDecoderStream()).pipeThrough(new TextLineStream()).pipeTo(new ConsoleStream("error"))
+Deno.addSignalListener("SIGINT", () => {
+    child.kill("SIGINT")
+})
+Deno.addSignalListener("SIGTERM", () => {
+    child.kill("SIGTERM")
+})
 

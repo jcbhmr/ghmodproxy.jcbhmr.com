@@ -1,18 +1,8 @@
-export class ConsoleErrorStream extends WritableStream<string> {
-    constructor() {
+export default class ConsoleStream extends WritableStream<string> {
+    constructor(methodName: "log" | "error" | "warn" | "info" | "debug" = "log") {
         super({
             write(chunk, _controller) {
-                console.error(chunk)
-            },
-        })
-    }
-}
-
-export class ConsoleLogStream extends WritableStream<string> {
-    constructor() {
-        super({
-            write(chunk, _controller) {
-                console.log(chunk)
+                console[methodName](chunk)
             },
         })
     }
