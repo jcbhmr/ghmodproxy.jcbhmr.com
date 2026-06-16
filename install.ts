@@ -6,8 +6,6 @@ import * as fsPromises from "node:fs/promises"
 import * as path from "node:path"
 import * as os from "node:os"
 
-Deno.exit(0)
-
 const response = await fetch("https://go.dev/dl/go1.26.4.linux-amd64.tar.gz")
 if (response.status !== 200) {
     throw new DOMException(`${response.url} ${response.status} ${response.statusText}`)

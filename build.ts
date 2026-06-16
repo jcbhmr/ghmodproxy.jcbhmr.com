@@ -3,8 +3,6 @@ import { execa } from "npm:execa@9.6.1"
 import * as path from "node:path"
 import * as os from "node:os"
 
-Deno.exit(0)
-
 await execa({
     verbose: "short",
     stdio: "inherit",
