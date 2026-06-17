@@ -24,4 +24,4 @@ source code.
 
 ## Development
 
-This site is hosted on Deno Deploy.
+TODO
