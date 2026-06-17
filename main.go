@@ -97,7 +97,7 @@ type parsedQuery struct {
 	Stem   string
 }
 
-var ownerRegexp = regexp.MustCompile(`^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$`)
+var ownerRegexp = regexp.MustCompile(`^[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,37}[a-zA-Z0-9]$`)
 var repoRegexp = regexp.MustCompile(`^[a-zA-Z0-9._-]{1,100}$`)
 
 func parseQuery(q url.Values, pathValue string) (pq parsedQuery, err error) {
