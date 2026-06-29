@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "dev": "deno serve --allow-all --watch main.ts"
+  },
+  "imports": {
+    "@std/http": "jsr:@std/http@^1.1.1",
+    "@std/path": "jsr:@std/path@^1.1.5",
+    "@zip.js/zip.js": "npm:@zip.js/zip.js@^2.8.26",
+    "octokit": "npm:octokit@^5.0.5"
+  }
+}
