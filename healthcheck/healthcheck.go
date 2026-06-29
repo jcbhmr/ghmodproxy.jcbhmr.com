@@ -1,6 +1,8 @@
 package healthcheck
 
-import "time"
+import (
+	"time"
+)
 
 const ContentType = "application/health+json"
 
@@ -47,3 +49,5 @@ type ComponentDetails struct {
 	Output            string    `json:"output,omitempty"`
 	Links             Links     `json:"links,omitzero"`
 }
+
+type Links map[string]string

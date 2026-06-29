@@ -23,5 +23,3 @@ is a regular Go module file. The `.zip` file is a
 source code.
 
 ## Development
-
-TODO
