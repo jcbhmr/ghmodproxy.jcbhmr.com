@@ -1,3 +1,5 @@
 {
-    "deno.enable": true
+    "json.schemaDownload.trustedDomains": {
+        "https://openapi.vercel.sh/": true
+    }
 }

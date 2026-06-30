@@ -1,11 +1,7 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
-  "updateContentCommand": "curl -fsSL https://deno.land/install.sh | sh -s -- --yes",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "denoland.vscode-deno"
-      ]
-    }
-  }
+  "image": "mcr.microsoft.com/devcontainers/go",
+  "features": {
+    "ghcr.io/devcontainers/features/node": {}
+  },
+  "updateContentCommand": "npm install --global vercel"
 }
