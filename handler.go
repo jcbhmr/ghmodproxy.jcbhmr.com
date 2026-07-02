@@ -128,6 +128,10 @@ func list(w http.ResponseWriter, r *http.Request) {
 
 		versions = append(versions, v)
 	}
+	if len(versions) == 0 {
+		http.NotFound(w, r)
+		return
+	}
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprintf(w, "%s\n", strings.Join(versions, "\n"))
