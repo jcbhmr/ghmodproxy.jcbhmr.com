@@ -46,5 +46,5 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("Listening on %s", l.Addr())
-	log.Fatal(http.Serve(l, nil))
+	log.Fatal(http.Serve(l, Handler))
 }
