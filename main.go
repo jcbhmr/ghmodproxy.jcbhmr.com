@@ -1,22 +1,50 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"strconv"
+
+	"github.com/google/go-github/v88/github"
 )
 
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello from Go on Vercel")
-	})
+var Port uint16
+var GitHubClient *github.Client
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
+func Parse() {
+	if s := os.Getenv("PORT"); s != "" {
+		port64, err := strconv.ParseUint(s, 0, 16)
+		Port = uint16(port64)
+		if err != nil {
+			log.Fatalf("PORT=%q invalid: %v", s, err)
+		}
+	} else {
+		Port = 80
 	}
 
-	log.Fatal(http.ListenAndServe(":"+port, mux))
+	if s := os.Getenv("GITHUB_TOKEN"); s != "" {
+		var err error
+		GitHubClient, err = github.NewClient(github.WithAuthToken(s))
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		var err error
+		GitHubClient, err = github.NewClient()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func main() {
+	Parse()
+	l, err := net.Listen("tcp", ":"+strconv.FormatUint(uint64(Port), 10))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Listening on %s", l.Addr())
+	log.Fatal(http.Serve(l, nil))
 }

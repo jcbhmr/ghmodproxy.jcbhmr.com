@@ -1,7 +1,3 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/go",
-  "features": {
-    "ghcr.io/devcontainers/features/node": {}
-  },
-  "updateContentCommand": "npm install --global vercel"
+  "image": "mcr.microsoft.com/devcontainers/go"
 }
