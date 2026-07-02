@@ -149,6 +149,11 @@ func details(w http.ResponseWriter, r *http.Request) {
 	ext := r.PathValue("ext")
 	q := r.URL.Query()
 	subdirectory := q.Get("subdirectory")
+	name := q.Get("name")
+	if name == "" {
+		xhttp.BadRequest(w, r, "no ?name= value")
+		return
+	}
 
 	pathValue, pathErr := module.UnescapePath(escapedPath)
 	version, versionErr := module.UnescapeVersion(escapedVersion)
@@ -186,10 +191,10 @@ func details(w http.ResponseWriter, r *http.Request) {
 		w.Write(b)
 	case ".mod", ".zip":
 		i := slices.IndexFunc(release.GetAssets(), func(a *github.ReleaseAsset) bool {
-			return a.GetName() == version+".zip"
+			return a.GetName() == name
 		})
 		if i < 0 {
-			http.Error(w, fmt.Sprintf("asset %q not found", version+".zip"), http.StatusNotFound)
+			http.Error(w, fmt.Sprintf("asset %q not found", name), http.StatusNotFound)
 			return
 		}
 		asset := release.GetAssets()[i]
